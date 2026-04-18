@@ -1,5 +1,9 @@
 package com.parcial.Interfaces;
 
-public interface IMagico {
+import com.parcial.claseAbstracta.Criatura;
 
+
+public interface IMagico {
+   public void lanzarHechizo(Criatura objetivo);
+    public void aprenderHechizo(String hechizo);
 }
