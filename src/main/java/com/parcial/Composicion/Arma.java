@@ -1,37 +1,21 @@
 package com.parcial.Composicion;
 
+import com.parcial.claseAbstracta.Criatura;
+
 public class Arma {
-
     private String nombre;
-    private int daño;
+    private int dañoAdicional;
 
-    public Arma(String nombre, int daño) {
+    public Arma(String nombre, int dañoAdicional) {
         this.nombre = nombre;
-        this.daño = daño;
+        this.dañoAdicional = dañoAdicional;
     }
 
-    public String getNombre() {
-        return nombre;
+    public void atacarConArma(Criatura objetivo, int fuerzaBase) {
+        objetivo.defender(fuerzaBase + dañoAdicional);
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public int getDañoAdicional() {
+        return dañoAdicional;
     }
-
-    public int getDaño() {
-        return daño;
-    }
-
-    public void setDaño(int daño) {
-        this.daño = daño;
-    }
-
-    public void atacarConArma() {
-
-    }
-
-    public void getDañoAdicional() {
-
-    }
-
 }
