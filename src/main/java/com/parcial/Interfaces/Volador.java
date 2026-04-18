@@ -1,4 +1,4 @@
-package batalla;
+package com.parcial.Interfaces;
 
 
 public interface Volador {
