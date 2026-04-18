@@ -1,7 +1,6 @@
 package com.parcial.claseAbstracta;
 
 public abstract class Criatura {
-
     protected String nombre;
     protected int salud;
     protected int fuerza;
@@ -12,33 +11,18 @@ public abstract class Criatura {
         this.fuerza = fuerza;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre() { return nombre; }
+
+    public int salud() { return salud; }
+
+    public void atacar(Criatura objetivo) {
+        objetivo.defender(fuerza);
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void defender(int daño) {
+        salud -= daño;
+        if (salud < 0) salud = 0;
     }
-
-    public int getSalud() {
-        return salud;
-    }
-
-    public void setSalud(int salud) {
-        this.salud = salud;
-    }
-
-    public int getFuerza() {
-        return fuerza;
-    }
-
-    public void setFuerza(int fuerza) {
-        this.fuerza = fuerza;
-    }
-
-    public abstract void atacar(Criatura objetivo);
-
-    public abstract void defender(int daño);
 
     public boolean estaViva() {
         return salud > 0;
