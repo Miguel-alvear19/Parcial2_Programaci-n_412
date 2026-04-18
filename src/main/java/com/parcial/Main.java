@@ -1,140 +1,52 @@
 package com.parcial;
 
-import com.parcial.ClaseConcreta.Dragon;
 import com.parcial.ClaseConcreta.Guerrero;
 import com.parcial.ClaseConcreta.Mago;
-import com.parcial.Composicion.Arma;
-import com.parcial.Interfaces.Magico;
-import com.parcial.Interfaces.Volador;
 import com.parcial.claseAbstracta.Criatura;
+import com.parcial.Composicion.Arma;
+import com.parcial.ClaseConcreta.Dragon;
+import com.parcial.Interfaces.IMagico;
+import com.parcial.Interfaces.IVolador;
 
-/**
- * Clase Principal (Main)
- * Crea las criaturas, las equipa con armas y simula batallas entre ellas.
- * Muestra el resultado de cada ronda y el ganador final.
- */
 public class Main {
-
-    /**
-     * Simula una batalla entre dos criaturas.
-     * La batalla continúa ronda a ronda hasta que una de las criaturas muera.
-     * Se alternan los ataques: criatura1 ataca primero en cada ronda.
-     *
-     * @param criatura1 Primera criatura participante.
-     * @param criatura2 Segunda criatura participante.
-     */
     public static void simularBatalla(Criatura criatura1, Criatura criatura2) {
-        System.out.println("\n========================================");
-        System.out.println("  BATALLA: " + criatura1.getNombre()
-                + " VS " + criatura2.getNombre());
-        System.out.println("========================================");
+        System.out.println("⚔️ ¡Comienza la batalla entre " + criatura1.getNombre() + " y " + criatura2.getNombre() + "!");
 
-        // Si las criaturas tienen habilidades especiales, las usan antes de la batalla
-        if (criatura1 instanceof Volador) {
-            ((Volador) criatura1).volar(); // El dragón vuela antes de atacar
-        }
-        if (criatura2 instanceof Magico) {
-            ((Magico) criatura2).lanzarHechizo(); // El mago lanza su hechizo de apertura
-        }
-
-        int ronda = 1;
-
+        int turno = 1;
         // La batalla continúa mientras ambas criaturas estén vivas
         while (criatura1.estaViva() && criatura2.estaViva()) {
-            System.out.println("\n--- Ronda " + ronda + " ---");
+            System.out.println("\n--- Turno " + turno + " ---");
 
-            // Criatura 1 ataca a Criatura 2
-            if (criatura1.estaViva()) {
-                criatura1.atacar(criatura2);
-            }
+            // Criatura 1 ataca
+            System.out.println("👉 " + criatura1.getNombre() + " ataca a " + criatura2.getNombre());
+            criatura1.atacar(criatura2);
+            System.out.println("💀 Salud de " + criatura2.getNombre() + ": " + criatura2.salud());
 
-            // Criatura 2 contraataca si sigue viva
-            if (criatura2.estaViva()) {
-                criatura2.atacar(criatura1);
-            }
+            // Verificar si criatura2 murió
+            if (!criatura2.estaViva()) break;
 
-            ronda++;
+            // Criatura 2 ataca
+            System.out.println("👉 " + criatura2.getNombre() + " ataca a " + criatura1.getNombre());
+            criatura2.atacar(criatura1);
+            System.out.println("💀 Salud de " + criatura1.getNombre() + ": " + criatura1.salud());
 
-            // Seguridad: evitar bucle infinito si ambas tienen salud infinita
-            if (ronda > 100) {
-                System.out.println("La batalla fue demasiado larga. ¡Empate!");
-                return;
-            }
+            turno++;
         }
 
-        // Si el dragón participó y ganó, aterriza
-        if (criatura1 instanceof Volador && criatura1.estaViva()) {
-            ((Volador) criatura1).aterrizar();
-        }
-
-        // Mostrar el resultado final
-        System.out.println("\n========================================");
-        if (!criatura1.estaViva() && !criatura2.estaViva()) {
-            System.out.println("  RESULTADO: ¡Ambas criaturas murieron! EMPATE.");
-        } else if (criatura1.estaViva()) {
-            System.out.println("  GANADOR: " + criatura1.getNombre()
-                    + " con " + criatura1.getSalud() + " puntos de salud restantes.");
+        // Resultado final
+        System.out.println("\n🏆 ¡La batalla ha terminado!");
+        if (criatura1.estaViva()) {
+            System.out.println("🎉 " + criatura1.getNombre() + " ha ganado.");
         } else {
-            System.out.println("  GANADOR: " + criatura2.getNombre()
-                    + " con " + criatura2.getSalud() + " puntos de salud restantes.");
+            System.out.println("🎉 " + criatura2.getNombre() + " ha ganado.");
         }
-        System.out.println("========================================\n");
     }
 
-    /**
-     * Método principal. Crea criaturas, las equipa y simula batallas entre ellas.
-     *
-     * @param args Argumentos de línea de comandos (no se usan).
-     */
     public static void main(String[] args) {
+        Guerrero guerrero = new Guerrero("Conan", 100, 20, new Arma("Espada", 10));
+        Mago mago = new Mago("Merlín", 80, 15, new Arma("Báculo", 5));
+        Dragon dragon = new Dragon("Smaug", 150, 25, new Arma("Fuego", 20));
 
-        // --- Crear armas ---
-        Arma espadaLarga    = new Arma("Espada Larga", 8);
-        Arma bastonMagico   = new Arma("Bastón Mágico", 5);
-        Arma garrasDeFuego  = new Arma("Garras de Fuego", 10);
-
-        // --- Crear criaturas ---
-        Dragon dragon   = new Dragon("Ignis", 150, 30, "Escamas de Fuego");
-        Mago   mago     = new Mago("Merlin", 80, 25, "Bola de Fuego");
-        Guerrero guerrero = new Guerrero("Thor", 120, 20, "su espada de acero");
-
-        // --- Equipar armas a las criaturas (Composición) ---
-        dragon.equiparArma(garrasDeFuego);
-        mago.equiparArma(bastonMagico);
-        guerrero.equiparArma(espadaLarga);
-
-        // --- El mago aprende un hechizo nuevo antes de las batallas ---
-        mago.aprenderHechizo();
-
-        // ============================
-        // Batalla 1: Dragón vs Guerrero
-        // ============================
-        simularBatalla(dragon, guerrero);
-
-        // Restaurar salud para la siguiente batalla (reiniciar criaturas)
-        Dragon dragon2    = new Dragon("Ignis", 150, 30, "Escamas de Fuego");
-        Mago   mago2      = new Mago("Merlin", 80, 25, "Bola de Fuego");
-        Guerrero guerrero2 = new Guerrero("Thor", 120, 20, "su espada de acero");
-
-        dragon2.equiparArma(new Arma("Garras de Fuego", 10));
-        mago2.equiparArma(new Arma("Bastón Mágico", 5));
-        guerrero2.equiparArma(new Arma("Espada Larga", 8));
-
-        // ============================
-        // Batalla 2: Mago vs Guerrero
-        // ============================
-        simularBatalla(mago2, guerrero2);
-
-        // Nuevas instancias para la tercera batalla
-        Dragon dragon3 = new Dragon("Ignis", 150, 30, "Escamas de Fuego");
-        Mago   mago3   = new Mago("Merlin", 80, 25, "Bola de Fuego");
-
-        dragon3.equiparArma(new Arma("Garras de Fuego", 10));
-        mago3.equiparArma(new Arma("Bastón Mágico", 5));
-
-        // ============================
-        // Batalla 3: Dragón vs Mago
-        // ============================
-        simularBatalla(dragon3, mago3);
+        simularBatalla(guerrero, dragon);
     }
 }
