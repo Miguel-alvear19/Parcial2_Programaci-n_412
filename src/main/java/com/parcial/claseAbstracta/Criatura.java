@@ -11,9 +11,13 @@ public abstract class Criatura {
         this.fuerza = fuerza;
     }
 
-    public String getNombre() { return nombre; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public int salud() { return salud; }
+    public int salud() {
+        return salud;
+    }
 
     public void atacar(Criatura objetivo) {
         objetivo.defender(fuerza);
@@ -21,13 +25,12 @@ public abstract class Criatura {
 
     public void defender(int daño) {
         salud -= daño;
-        if (salud < 0) salud = 0;
+        if (salud < 0)
+            salud = 0;
     }
 
     public boolean estaViva() {
         return salud > 0;
     }
-
-    
 
 }
